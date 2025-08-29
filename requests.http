@@ -1,0 +1,25 @@
+@host = http://localhost:8080
+
+### Health
+GET {{host}}/api/health
+
+### Create mood (valid)
+POST {{host}}/api/moods
+Content-Type: application/json
+
+{
+  "score": 5,
+  "note": "Ate burger"
+}
+
+### List moods
+GET {{host}}/api/moods
+
+### Create mood (invalid – expect 400)
+POST {{host}}/api/moods
+Content-Type: application/json
+
+{
+  "score": 999,
+  "note": "oops"
+}
