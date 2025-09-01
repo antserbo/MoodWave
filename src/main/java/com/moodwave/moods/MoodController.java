@@ -1,8 +1,10 @@
 package com.moodwave.moods;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.*;
@@ -11,23 +13,31 @@ import java.util.*;
 @RequestMapping("/api/moods")
 public class MoodController {
 
-    private final List<Mood> store = new ArrayList<>();
+    private final MoodRepository repo;
+
+    public MoodController(MoodRepository repo) {
+        this.repo = repo;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mood create(@Valid @RequestBody MoodEntryRequest req) {
-        String id = UUID.randomUUID().toString();
-        Instant ts = (req.ts() == null) ? Instant.now() : req.ts();
-        Mood mood = new Mood(id, ts, req.score(), req.note());
-        store.add(mood);
+        Instant now = Instant.now();
+        Instant createdAt = (req.ts() == null) ? now : req.ts();
+        if (createdAt.isAfter(now)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Timestamp cannot be in the future");
+        }
 
-        return mood;
+        Mood mood = (req.ts() == null)
+                ? new Mood(req.note(), req.score())
+                : new Mood(req.note(), req.score(), createdAt);
+
+        return repo.save(mood);
     }
+
 
     @GetMapping
     public List<Mood> list() {
-        List<Mood> copy = new ArrayList<>(store);
-        copy.sort(Comparator.comparing(Mood::ts).reversed());
-        return copy;
+        return repo.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
     }
 }

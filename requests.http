@@ -1,25 +1,32 @@
-@host = http://localhost:8080
+### Create mood without timestamp
+POST http://localhost:8080/api/moods
+Content-Type: application/json
 
-### Health
-GET {{host}}/api/health
+{
+  "score": 7,
+  "note": "Felt focused"
+}
 
-### Create mood (valid)
-POST {{host}}/api/moods
+### Create mood with custom (past) timestamp
+POST http://localhost:8080/api/moods
 Content-Type: application/json
 
 {
   "score": 5,
-  "note": "Ate burger"
+  "note": "Backfilled entry",
+  "ts": "2025-08-30T18:00:00Z"
 }
 
-### List moods
-GET {{host}}/api/moods
-
-### Create mood (invalid – expect 400)
-POST {{host}}/api/moods
+### Create mood with future timestamp (should fail 400)
+POST http://localhost:8080/api/moods
 Content-Type: application/json
 
 {
-  "score": 999,
-  "note": "oops"
+  "score": 3,
+  "note": "Future mood?",
+  "ts": "2999-01-01T00:00:00Z"
 }
+
+### List moods (newest first)
+GET http://localhost:8080/api/moods
+Accept: application/json
