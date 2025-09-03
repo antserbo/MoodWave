@@ -1,10 +1,13 @@
 package com.moodwave.moods;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.List;
@@ -29,9 +32,11 @@ public class MoodService {
             throw new IllegalArgumentException("Timestamp cannot be in the future.");
         }
 
+        String normalizedNote = (req.note() == null) ? "" : req.note().trim();
+
         Mood mood = (req.ts() == null)
-                ? new Mood(req.note(), req.score())
-                : new Mood(req.note(), req.score(), createdAt);
+                ? new Mood(normalizedNote, req.score())
+                : new Mood(normalizedNote, req.score(), createdAt);
 
         return MoodResponse.fromEntity(repo.save(mood));
     }
@@ -77,6 +82,45 @@ public class MoodService {
         }
 
         return pageResult.map(MoodResponse::fromEntity);
+    }
+
+    @Transactional(readOnly = true)
+    public MoodResponse getById(Long id) {
+        Mood m = repo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Mood not found"));
+        return MoodResponse.fromEntity(m);
+    }
+
+    @Transactional
+    public MoodResponse update(Long id, @Valid MoodUpdateRequest req) {
+        Mood m = repo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Mood not found"));
+
+        if (req.score() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mood score is required");
+        }
+
+        if (req.ts() != null && req.ts().isAfter(Instant.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mood timestamp cannot be in the future");
+        }
+
+        m.setIntensity(req.score());
+        if (req.note() != null) {
+            m.setDescription(req.note().trim());
+        }
+
+        if (req.ts() != null) {
+            m.setCreatedAt(req.ts());
+        }
+
+        return MoodResponse.fromEntity(repo.save(m));
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Mood m = repo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Mood not found"));
+        repo.delete(m);
     }
 
 }

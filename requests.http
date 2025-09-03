@@ -50,3 +50,69 @@ Accept: application/json
 ### Open-ended: to only (everything up to 2025-09-03T00:00:00Z)
 GET http://localhost:8080/api/moods?to=2025-09-03T00%3A00%3A00Z
 Accept: application/json
+
+### Get missing (should be 404)
+GET http://localhost:8080/api/moods/999999
+Accept: application/json
+
+### Create mood (no note, should default to "")
+POST http://localhost:8080/api/moods
+Content-Type: application/json
+
+{
+  "score": 6
+}
+
+### List moods (to see assigned id)
+GET http://localhost:8080/api/moods
+Accept: application/json
+
+### Get mood by id
+GET http://localhost:8080/api/moods/1
+Accept: application/json
+
+### Update mood (score only, should keep existing note)
+PUT http://localhost:8080/api/moods/1
+Content-Type: application/json
+
+{
+  "score": 7
+}
+
+### PUT with future timestamp (should be 400)
+PUT http://localhost:8080/api/moods/1
+Content-Type: application/json
+
+{
+  "score": 5,
+  "note": "Future test",
+  "ts": "2999-01-01T00:00:00Z"
+}
+
+### Update mood (explicitly clear note with "")
+PUT http://localhost:8080/api/moods/1
+Content-Type: application/json
+
+{
+  "score": 7,
+  "note": ""
+}
+
+### Create one
+POST http://localhost:8080/api/moods
+Content-Type: application/json
+
+{ "score": 6 }
+
+### Find ID
+GET http://localhost:8080/api/moods
+Accept: application/json
+
+### Delete (replace 1 with real id) -> expect 204
+DELETE http://localhost:8080/api/moods/1
+
+### Get same id -> expect 404
+GET http://localhost:8080/api/moods/1
+Accept: application/json
+
+

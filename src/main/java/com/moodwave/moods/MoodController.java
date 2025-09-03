@@ -34,4 +34,23 @@ public class MoodController {
 
         return service.list(from, to, page, size);
     }
+
+    @GetMapping("/{id}")
+    public MoodResponse getOne(@PathVariable Long id) {
+        return service.getById(id);
+    }
+
+    @PutMapping("/{id}")
+    public MoodResponse update(
+            @PathVariable Long id,
+            @Valid @RequestBody MoodUpdateRequest req
+    ) {
+        return service.update(id, req);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
+    }
 }

@@ -52,4 +52,16 @@ public class Mood {
         return createdAt;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setIntensity(int intensity) {
+        this.intensity = intensity;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
 }
