@@ -1,4 +1,4 @@
-### Create mood without timestamp
+### Create mood without timestamp (server sets createdAt = now)
 POST http://localhost:8080/api/moods
 Content-Type: application/json
 
@@ -7,26 +7,46 @@ Content-Type: application/json
   "note": "Felt focused"
 }
 
-### Create mood with custom (past) timestamp
+### Create mood with custom past timestamp
 POST http://localhost:8080/api/moods
 Content-Type: application/json
 
 {
   "score": 5,
   "note": "Backfilled entry",
-  "ts": "2025-08-30T18:00:00Z"
+  "ts": "2025-08-30T18%3A00%3A00Z"
 }
 
-### Create mood with future timestamp (should fail 400)
+### Create mood with future timestamp (should return 400)
 POST http://localhost:8080/api/moods
 Content-Type: application/json
 
 {
   "score": 3,
   "note": "Future mood?",
-  "ts": "2999-01-01T00:00:00Z"
+  "ts": "2999-01-01T00%3A00%3A00Z"
 }
 
-### List moods (newest first)
+### List moods (default page: page=0, size=20)
 GET http://localhost:8080/api/moods
+Accept: application/json
+
+### Page 1 (0-based) with size 5
+GET http://localhost:8080/api/moods?page=1&size=5
+Accept: application/json
+
+### Oversized size (service should cap it, e.g., 100)
+GET http://localhost:8080/api/moods?page=0&size=999
+Accept: application/json
+
+### Date range: from 2025-08-30T00:00:00Z to 2025-09-03T00:00:00Z
+GET http://localhost:8080/api/moods?from=2025-08-30T00%3A00%3A00Z&to=2025-09-03T00%3A00%3A00Z
+Accept: application/json
+
+### Open-ended: from only (everything since 2025-08-30T00:00:00Z)
+GET http://localhost:8080/api/moods?from=2025-08-30T00%3A00%3A00Z
+Accept: application/json
+
+### Open-ended: to only (everything up to 2025-09-03T00:00:00Z)
+GET http://localhost:8080/api/moods?to=2025-09-03T00%3A00%3A00Z
 Accept: application/json

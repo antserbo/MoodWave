@@ -1,8 +1,12 @@
 package com.moodwave.moods;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.Instant;
+
 public interface MoodRepository extends JpaRepository<Mood, Long> {
-    // later you can add methods like:
-    // List<Mood> findByIntensityGreaterThanEqual(int min);
+
+    Page<Mood> findByCreatedAtBetween(Instant startInclusive, Instant endInclusive, Pageable pageable);
 }
