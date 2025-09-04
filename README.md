@@ -1,6 +1,6 @@
-MoodWave 🌊
+AffectFlux 💙🌀
 
-MoodWave is a mood-tracking diary application built with Spring Boot and Java.
+AffectFlux is a mood-tracking diary application built with Spring Boot and Java.
 It allows users to log their daily mental “score” and visualize emotional trends over time through automatically generated graphs.
 
 ✨ Features
