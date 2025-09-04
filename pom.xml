@@ -8,11 +8,11 @@
 		<version>3.5.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.moodwave</groupId>
-	<artifactId>moodwave</artifactId>
+	<groupId>com.affectflux</groupId>
+	<artifactId>affectflux-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>MoodWave</name>
-	<description>Mental health tracker</description>
+	<name>AffectFlux API</name>
+	<description>Mood tracking API for AffectFlux</description>
 	<url/>
 	<licenses>
 		<license/>

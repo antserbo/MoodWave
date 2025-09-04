@@ -1,4 +1,4 @@
-package com.moodwave.moods;
+package com.affectflux.moods;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

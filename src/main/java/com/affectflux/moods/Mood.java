@@ -1,4 +1,4 @@
-package com.moodwave.moods;
+package com.affectflux.moods;
 
 import java.time.Instant;
 

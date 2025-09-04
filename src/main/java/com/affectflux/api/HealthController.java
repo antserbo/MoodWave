@@ -1,4 +1,4 @@
-package com.moodwave.api;
+package com.affectflux.api;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

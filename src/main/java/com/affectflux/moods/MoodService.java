@@ -1,4 +1,4 @@
-package com.moodwave.moods;
+package com.affectflux.moods;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;

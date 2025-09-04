@@ -1,4 +1,4 @@
-package com.moodwave.moods;
+package com.affectflux.moods;
 
 import jakarta.validation.Valid;
 import org.springframework.data.domain.*;
@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/moods")

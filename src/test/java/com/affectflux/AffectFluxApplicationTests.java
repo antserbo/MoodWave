@@ -1,10 +1,10 @@
-package com.moodwave;
+package com.affectflux;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MoodWaveApplicationTests {
+class AffectFluxApplicationTests {
 
 	@Test
 	void contextLoads() {
