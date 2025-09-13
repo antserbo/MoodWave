@@ -1,6 +1,5 @@
 package com.affectflux.moods;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -92,7 +91,7 @@ public class MoodService {
     }
 
     @Transactional
-    public MoodResponse update(Long id, @Valid MoodUpdateRequest req) {
+    public MoodResponse update(Long id, MoodUpdateRequest req) {
         Mood m = repo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Mood not found"));
 

@@ -116,3 +116,37 @@ GET http://localhost:8080/api/moods/1
 Accept: application/json
 
 
+
+
+
+### (A) Create with bad score -> 400 + errors[]
+POST http://localhost:8080/api/moods
+Content-Type: application/json
+
+{
+  "score": 42,
+  "note": "too high"
+}
+
+### (B) Malformed JSON -> 400 "Malformed request body"
+POST http://localhost:8080/api/moods
+Content-Type: application/json
+
+{ "score": 5, "note": "oops",
+}
+
+### (C) GET missing id -> 404 "Mood not found"
+GET http://localhost:8080/api/moods/999999
+Accept: application/json
+
+### (D) PUT future ts -> 400
+PUT http://localhost:8080/api/moods/1
+Content-Type: application/json
+
+{
+  "score": 5,
+  "ts": "2999-01-01T00:00:00Z"
+}
+
+
+
