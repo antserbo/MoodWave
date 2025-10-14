@@ -1,5 +1,7 @@
 package com.affectflux.moods;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import java.time.Instant;
 
 @RestController
 @RequestMapping("/api/moods")
+@Tag(name = "Moods", description = "Track and query mood entries")
 public class MoodController {
 
     private final MoodService service;
@@ -25,9 +28,13 @@ public class MoodController {
 
     @GetMapping
     public Page<MoodResponse> list(
+            @Parameter(description = "Start (ISO-8601)", example = "2025-09-01T00:00:00Z")
             @RequestParam(required = false) Instant from,
+            @Parameter(description = "End (ISO-8601)", example = "2025-09-14T23:59:59Z")
             @RequestParam(required = false) Instant to,
+            @Parameter(description = "Page number (0-based)", example = "0")
             @RequestParam(required = false) Integer page,
+            @Parameter(description = "Page size (max 100)", example = "20")
             @RequestParam(required = false) Integer size
     ) {
 

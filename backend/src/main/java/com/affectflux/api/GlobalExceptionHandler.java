@@ -84,11 +84,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleOther(Exception ex, HttpServletRequest req) {
+        ex.printStackTrace(); // TEMP: dump full stacktrace
         ApiError body = new ApiError(
                 Instant.now(),
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                "Something went wrong",
+                500,
+                "Internal Server Error",
+                ex.getMessage(),   // <- show actual exception message instead of generic text
                 req.getRequestURI(),
                 List.of()
         );
