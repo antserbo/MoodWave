@@ -76,22 +76,54 @@
 			<version>3.18.0</version>
 		</dependency>
 
+		<!-- DB driver -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.7.4</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Flyway migration runner -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>10.17.0</version>
+		</dependency>
+
+		<!-- Flyway support for PostgreSQL (version must match flyway-core) -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+			<version>10.17.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>10.17.0</version>
 				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</path>
-					</annotationProcessorPaths>
+					<!-- JDBC to your Docker Postgres -->
+					<url>jdbc:postgresql://localhost:5432/affectflux</url>
+					<user>affectflux</user>
+					<password>affectflux</password>
+
+					<!-- Where migrations are; use filesystem for Maven -->
+					<locations>
+						<location>filesystem:src/main/resources/db/migration</location>
+					</locations>
+
+					<!-- optional but fine -->
+					<schemas>
+						<schema>public</schema>
+					</schemas>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
